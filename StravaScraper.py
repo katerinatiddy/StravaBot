@@ -1,9 +1,9 @@
-###############################
-#                             #
-# StravaScraper v3.1          #
-# Overflow Digital            #
-#			      #
-###############################
+######################
+#                    #
+# StravaScraper v3.1 #
+#  Overflow Digital  #
+#		     #
+######################
 	
 from bs4 import BeautifulSoup
 import requests
@@ -122,8 +122,8 @@ def main():
     options.add_argument('--window-size=80,80')
     options.add_argument('--disable-dev-shm-usage')
     options.set_headless()
-    chromrdriver = '/home/katerina/Strava/chromedriver'
-    #chromrdriver = "C:/Users/kater/Desktop/Strava/chromedriver"
+    chromrdriver = '/home/katerina/Strava/chromedriver' # Linux server path
+    #chromrdriver = "C:/Users/kater/Desktop/Strava/chromedriver" # PC path
     os.environ["webdriver.chrome.driver"] = chromrdriver
     driver = webdriver.Chrome(chromrdriver, chrome_options = options)
 
