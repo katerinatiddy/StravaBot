@@ -1,9 +1,8 @@
 ###############################
 #                             #
 # StravaScraper v3.1          #
-# By DumbBitchClub            #
-# DumbBitch.club | DumbBit.ch #
-#							  #
+# Overflow Digital            #
+#			      #
 ###############################
 	
 from bs4 import BeautifulSoup
@@ -21,8 +20,8 @@ class StravaScraper(object):
     # Login to strava using email and password
     def login(self, driver):       
         driver.get ('https://www.strava.com/login/session')
-        driver.find_element_by_id('email').send_keys('katerinatiddy@gmail.com')
-        driver.find_element_by_id ('password').send_keys('veG4nABN9jzdGPL')
+        driver.find_element_by_id('email').send_keys(EMAIL)
+        driver.find_element_by_id ('password').send_keys(PASSWORD)
         driver.find_element_by_id('login-button').click()
         
     
@@ -42,9 +41,7 @@ class StravaScraper(object):
     # Insert values into the database if they don't already exist
     def sql_insert(conn, athlete, datetime, duration):
         c = conn.cursor()
-        #c.execute('INSERT INTO data (name, date, duration) VALUES(?, ?, ?) SELECT * FROM data WHERE NOT EXISTS (SELECT * FROM data WHERE VALUES = (?, ?, ?))', (athlete, datetime, duration, athlete, datetime, duration))
         c.execute('INSERT INTO data (name, date, duration) VALUES(?, ?, ?);', (athlete, datetime, duration))
-        #c.execute('INSERT INTO data (name, date, duration) VALUES (?, ?, ?) ON CONFLICT (name, date, duration) DO NOTHING;', (athlete, datetime, duration))
 
 
     # Go to club activity feed and pull data
@@ -59,7 +56,7 @@ class StravaScraper(object):
             last_date = int(float(last_date.replace('-', '')))
         print('Last date in db: ', last_date)
 
-        driver.get("https://www.strava.com/clubs/774078/recent_activity")
+        driver.get(CLUB_PAGE)
 
         ScrollNumber = 10 # How many scrolls down the page to go
         for i in range(1, ScrollNumber):
@@ -113,14 +110,12 @@ def main():
     import sys
     print('---------------------------')
     print('StravaScraper v3.1')
-    print('By DumbBitchClub')
-    print('DumbBitch.club | DumbBit.ch')
+    print('By Overflow Digital')
     print('---------------------------')
     print()
 
     # Open chromedriver to open webpages
     print('Opening chromedriver...')
-    #chromrdriver = "C:/Users/kater/Desktop/Strava/chromedriver"
     options = webdriver.ChromeOptions()
     options.add_argument('no-sandbox')
     options.add_argument('--disable-gpu')
@@ -128,6 +123,7 @@ def main():
     options.add_argument('--disable-dev-shm-usage')
     options.set_headless()
     chromrdriver = '/home/katerina/Strava/chromedriver'
+    #chromrdriver = "C:/Users/kater/Desktop/Strava/chromedriver"
     os.environ["webdriver.chrome.driver"] = chromrdriver
     driver = webdriver.Chrome(chromrdriver, chrome_options = options)
 
