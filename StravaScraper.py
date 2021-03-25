@@ -16,10 +16,15 @@ import sqlite3
 from unidecode import unidecode
 
 class StravaScraper(object):   
+
+	EMAIL = ''
+	PASSWORD = ''
+	LOGIN_PAGE = 'https://www.strava.com/login/session'
+	CLUB_PAGE = 'https://www.strava.com/clubs/club_name'
     
     # Login to strava using email and password
     def login(self, driver):       
-        driver.get ('https://www.strava.com/login/session')
+        driver.get (LOGIN_PAGE)
         driver.find_element_by_id('email').send_keys(EMAIL)
         driver.find_element_by_id ('password').send_keys(PASSWORD)
         driver.find_element_by_id('login-button').click()
@@ -68,6 +73,7 @@ class StravaScraper(object):
                                                     'activity entity-details feed-entry min-view']})
 
         print('Inserting into database...')
+		# Loop round all activities in club and extract data
         for a in activities:
             datetime = a.time['datetime']
             athlete = a.find('a', class_ = 'entry-athlete')
@@ -76,7 +82,8 @@ class StravaScraper(object):
             #if None in (athlete, datetime, duration):
                 #continue
             datetime = datetime[:-13]
-
+			
+			# Formatting
             if(int(datetime.replace('-', '')) > last_date):
                 athlete = athlete.text.strip()
                 if(athlete.endswith('Subscriber')):
@@ -96,10 +103,10 @@ class StravaScraper(object):
                     duration = duration_m + (duration_h * 60)
 
                 StravaScraper.sql_insert(conn, athlete, datetime, duration)
-            print(athlete)
-            print(datetime)
-            print(duration)
-            print()
+            #print(athlete)
+            #print(datetime)
+            #print(duration)
+            #print()
         conn.commit()
         conn.close()
         print('Insert complete...')
@@ -123,13 +130,13 @@ def main():
     options.add_argument('--disable-dev-shm-usage')
     options.set_headless()
     chromrdriver = '/home/katerina/Strava/chromedriver' # Linux server path
-    #chromrdriver = "C:/Users/kater/Desktop/Strava/chromedriver" # PC path
+    #chromrdriver = "C:/Users/kater/Desktop/Strava/chromedriver" # Local path
     os.environ["webdriver.chrome.driver"] = chromrdriver
     driver = webdriver.Chrome(chromrdriver, chrome_options = options)
 
     print('Connecting to database...')
-    database = r"/home/katerina/Strava/strava.db"
-    #database = r'C:/Users/kater/Desktop/Strava/strava.db'
+    database = r"/home/katerina/Strava/strava.db" # Linux server path
+    #database = r'C:/Users/kater/Desktop/Strava/strava.db' # Local path
 
     scraper = StravaScraper()
 
