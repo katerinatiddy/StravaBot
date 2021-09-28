@@ -19,8 +19,10 @@ class StravaScraper(object):
 
 	EMAIL = ''
 	PASSWORD = ''
+	DATABASE = ''
 	LOGIN_PAGE = 'https://www.strava.com/login/session'
 	CLUB_PAGE = 'https://www.strava.com/clubs/club_name'
+	
     
     # Login to strava using email and password
     def login(self, driver):       
@@ -135,8 +137,7 @@ def main():
     driver = webdriver.Chrome(chromrdriver, chrome_options = options)
 
     print('Connecting to database...')
-    database = r"/home/katerina/Strava/strava.db" # Linux server path
-    #database = r'C:/Users/kater/Desktop/Strava/strava.db' # Local path
+    database = DATABASE # Linux server path
 
     scraper = StravaScraper()
 
